@@ -105,28 +105,94 @@
 
 -- Drop existing tables, so you'll start fresh each time this script is run.
 -- TODO!
+DROP TABLE IF EXISTS Actor; 
+DROP TABLE IF EXISTS Studio; 
+DROP TABLE IF EXISTS Movie; 
+DROP TABLE IF EXISTS MovieCast;
+
 
 -- Create new tables, according to your domain model
 -- TODO!
+CREATE TABLE Actor ( id INTEGER PRIMARY KEY, name TEXT NOT NULL );
+CREATE TABLE Studio ( id INTEGER PRIMARY KEY, name TEXT NOT NULL );
+CREATE TABLE Movie ( id INTEGER PRIMARY KEY, title TEXT NOT NULL, year INTEGER NOT NULL, mpaa_rating TEXT NOT NULL, studio_id INTEGER NOT NULL, FOREIGN KEY (studio_id) REFERENCES Studios(id) );
+CREATE TABLE MovieCast ( id INTEGER PRIMARY KEY, movie_id INTEGER NOT NULL, actor_id INTEGER NOT NULL, character_name TEXT NOT NULL, FOREIGN KEY (movie_id) REFERENCES Movies(id), FOREIGN KEY (actor_id) REFERENCES Actors(id) );
+
 
 -- Insert data into your database that reflects the sample data shown above
 -- Use hard-coded foreign key IDs when necessary
 -- TODO!
+INSERT INTO Studio (name) VALUES ('Warner Bros.');
+
+INSERT INTO Actor (name) VALUES ('Christian Bale'); 
+INSERT INTO Actor (name) VALUES ('Michael Caine'); 
+INSERT INTO Actor (name) VALUES ('Liam Neeson'); 
+INSERT INTO Actor (name) VALUES ('Katie Holmes'); 
+INSERT INTO Actor (name) VALUES ('Gary Oldman'); 
+INSERT INTO Actor (name) VALUES ('Heath Ledger'); 
+INSERT INTO Actor (name) VALUES ('Aaron Eckhart'); 
+INSERT INTO Actor (name) VALUES ('Maggie Gyllenhaal'); 
+INSERT INTO Actor (name) VALUES ('Tom Hardy'); 
+INSERT INTO Actor (name) VALUES ('Joseph Gordon-Levitt'); 
+INSERT INTO Actor (name) VALUES ('Anne Hathaway');
+
+INSERT INTO Movie (title, year, mpaa_rating, studio_id) VALUES ('Batman Begins', 2005, 'PG-13', 1); 
+INSERT INTO Movie (title, year, mpaa_rating, studio_id) VALUES ('The Dark Knight', 2008, 'PG-13', 1); 
+INSERT INTO Movie (title, year, mpaa_rating, studio_id) VALUES ('The Dark Knight Rises', 2012, 'PG-13', 1);
+
+INSERT INTO MovieCast (movie_id, actor_id, character_name) VALUES (1, 1, 'Bruce Wayne'); 
+INSERT INTO MovieCast (movie_id, actor_id, character_name) VALUES (1, 2, 'Alfred'); 
+INSERT INTO MovieCast (movie_id, actor_id, character_name) VALUES (1, 3, 'Ra's Al Ghul'); 
+INSERT INTO MovieCast (movie_id, actor_id, character_name) VALUES (1, 4, 'Rachel Dawes'); 
+INSERT INTO MovieCast (movie_id, actor_id, character_name) VALUES (1, 5, 'Commissioner Gordon');
+INSERT INTO MovieCast (movie_id, actor_id, character_name) VALUES (2, 1, 'Bruce Wayne'); 
+INSERT INTO MovieCast (movie_id, actor_id, character_name) VALUES (2, 6, 'Joker');
+
 
 -- Prints a header for the movies output
 .print "Movies"
 .print "======"
 .print ""
+Puts "Movies"
+Puts "====="
+Puts ""
 
 -- The SQL statement for the movies output
 -- TODO!
+Movies=movie.all
+for movie in movies
+studio = Studio.find_by({"id" => movie["studio_id"]})
+
+  movie_title = movie["title"]
+  year_released = movie["year"]
+  rated = movie["mpaa_rating"]
+  studio_name = studio["name"]
+  puts "#{movie_title} - #{year_released} - #{rated} - #{studio_name}"
+end
+
 
 -- Prints a header for the cast output
 .print ""
 .print "Top Cast"
 .print "========"
 .print ""
+Puts ""
+Puts "Top Cast"
+Puts "======="
+Puts ""
+
 
 
 -- The SQL statement for the cast output
 -- TODO!
+casts = MovieCast.all
+for casts in MovieCast
+  movie = Movie.find_by({"id" => role["movie_id"]})
+  actor = Actor.find_by({"id" => role["actor_id"]})
+
+  movie_title = movie["title"]
+  actor_name = actor["name"]
+  character_name = role["character_name"]
+
+  puts "#{movie_title} - #{actor_name} - #{character_name}"
+end
